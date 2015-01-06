@@ -17,7 +17,7 @@ use Types::Standard -types;
 use File::ShareDir qw/dist_dir/;
 use YAML qw/LoadFile/;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our %warned_once;
 
 has ignore => (
@@ -115,13 +115,16 @@ sub file_ok {
     return 1 if -d $file;
 
     my $possible = 0;
-    my $matched = 0;
+    my $matched  = 0;
+    my $includes = 0;
+
     if ( @{ $self->include_type }) {
         for my $type (@{ $self->include_type }) {
             my $match = $self->types_match($file, $type);
             $possible-- if $match == 2;
             $matched += $match;
         }
+        $includes++;
     }
 
     if (!$matched) {
@@ -140,6 +143,7 @@ sub file_ok {
             last if $matches;
         }
         return 0 if !$matches;
+        $includes++;
     }
 
     if ($self->exclude) {
@@ -148,7 +152,7 @@ sub file_ok {
         }
     }
 
-    return 1;
+    return !$includes || $matched || $possible;
 }
 
 sub types_match {
@@ -198,7 +202,7 @@ File::TypeCategories - Determine if files match a specific type
 
 =head1 VERSION
 
-This documentation refers to File::TypeCategories version 0.01
+This documentation refers to File::TypeCategories version 0.02
 
 =head1 SYNOPSIS
 

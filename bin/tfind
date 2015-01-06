@@ -17,7 +17,7 @@ use Term::ANSIColor qw/:constants/;
 use Path::Tiny;
 use File::TypeCategories;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 my $REVERSE  = REVERSE;
 my $RESET    = RESET;
@@ -26,12 +26,7 @@ my $BOLD     = BOLD;
 my $ON_RED   = ON_RED;
 my $ON_GREEN = ON_GREEN;
 
-my %option = (
-    verbose => 0,
-    man     => 0,
-    help    => 0,
-    VERSION => 0,
-);
+my %option;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -67,10 +62,10 @@ sub main {
         'verbose|v+',
         'man',
         'help',
-        'VERSION!',
+        'version',
     ) or pod2usage(2);
 
-    if ( $option{'VERSION'} ) {
+    if ( $option{'version'} ) {
         print "$name Version = $VERSION\n";
         exit 1;
     }
@@ -163,7 +158,7 @@ tfind - Find files based on file types
 
 =head1 VERSION
 
-This documentation refers to tfind version 0.01
+This documentation refers to tfind version 0.02
 
 =head1 SYNOPSIS
 
